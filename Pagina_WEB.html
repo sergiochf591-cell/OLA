@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descubre los Drones: Tipos, Componentes y Usos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e9f5ff;
+            color: #333;
+            line-height: 1.6;
+        }
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(to right, #007BFF, #00c6ff);
+            color: white;
+            border-bottom: 5px solid #0056b3;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+        h2 {
+            font-size: 2em;
+            color: #0056b3;
+        }
+        h3 {
+            font-size: 1.5em;
+            margin: 10px 0;
+            color: #0077ff;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        .section {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .drone-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .drone-type {
+            cursor: pointer;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .drone-type:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            background: #e9f5ff;
+        }
+        .drone-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        .details {
+            display: none;
+            padding: 15px;
+            background: #f0f8ff;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 5px solid #007BFF;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+        }
+        .details.show {
+            opacity: 1;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(to right, #007BFF, #00c6ff);
+            color: white;
+            border-top: 5px solid #0056b3;
+            margin-top: 40px;
+        }
+        
+        /* Nuevos estilos para el carrusel */
+        .carousel-container {
+            position: relative;
+            max-width: 800px;
+            margin: 30px auto;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .carousel-slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousel-slide {
+            min-width: 100%;
+            position: relative;
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+        .carousel-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+        .prev {
+            left: 10px;
+        }
+        .next {
+            right: 10px;
+        }
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ccc;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .indicator.active {
+            background: #007BFF;
+        }
+        
+        /* Estilos para el filtro */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            background: #f0f8ff;
+            border: 2px solid #007BFF;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: #007BFF;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>¡Bienvenido al Mundo de los Drones!</h1>
+        <p>Descubre los diferentes tipos de drones, sus componentes clave y cómo se usan en la vida cotidiana. ¡Haz clic en cada tipo para ver más detalles!</p>
+    </header>
+
+    <div class="container">
+        <!-- Carrusel de drones -->
+        <div class="section">
+            <h2>Galería de Drones</h2>
+            <div class="carousel-container">
+                <div class="carousel-slides">
+                    <div class="carousel-slide">
+                        <img src="https://tse4.mm.bing.net/th/id/OIP.n9ub817QduUa6HmKMvLbHAHaEK?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Dron de Consumo - DJI Mavic">
+                        <div class="carousel-caption">
+                            <h3>Dron de Consumo DJI Mavic</h3>
+                            <p>Perfecto para fotografía y videografía aérea</p>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://uavdrone.es/wp-content/uploads/2017/11/Drone-de-carreras.jpg" alt="Dron Comercial - DJI Matrice">
+                        <div class="carousel-caption">
+                            <h3>Dron Comercial DJI Matrice</h3>
+                            <p>Ideal para inspecciones y aplicaciones empresariales</p>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://wallup.net/wp-content/uploads/2019/09/615082-northrop-grumman-x-47b-fighter-jet-concept-drone-military-boeing-748x496.jpg" alt="Dron Militar - MQ-9 Reaper">
+                        <div class="carousel-caption">
+                            <h3>Dron Militar MQ-9 Reaper</h3>
+                            <p>Diseñado para operaciones de vigilancia y defensa</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-btn prev">&#10094;</button>
+                <button class="carousel-btn next">&#10095;</button>
+                <div class="carousel-indicators">
+                    <span class="indicator active" data-slide="0"></span>
+                    <span class="indicator" data-slide="1"></span>
+                    <span class="indicator" data-slide="2"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tipos de Drones -->
+        <div class="section">
+            <h2>Tipos de Drones</h2>
+            <div class="filter-container">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="consumer">Consumo</button>
+                <button class="filter-btn" data-filter="commercial">Comerciales</button>
+                <button class="filter-btn" data-filter="military">Militares</button>
+            </div>
+            <div class="drone-types-grid">
+                <div class="drone-type" data-category="consumer">
+                    <img src="https://tse4.mm.bing.net/th/id/OIP.n9ub817QduUa6HmKMvLbHAHaEK?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Dron de Consumo - DJI Mavic" class="drone-image">
+                    <h3>Drones de Consumo</h3>
+                    <div class="details">
+                        <p><strong>Descripción:</strong> Diseñados para uso personal, como fotografía, videografía y recreación.</p>
+                        <p><strong>Ejemplos:</strong> DJI Mavic, Parrot Anafi.</p>
+                        <p><strong>Usos:</strong> Fotografía aérea, grabación de videos, entretenimiento.</p>
+                    </div>
+                </div>
+                <div class="drone-type" data-category="commercial">
+                    <img src="https://uavdrone.es/wp-content/uploads/2017/11/Drone-de-carreras.jpg" alt="Dron Comercial - DJI Matrice" class="drone-image">
+                    <h3>Drones Comerciales</h3>
+                    <div class="details">
+                        <p><strong>Descripción:</strong> Utilizados por empresas para tareas específicas, como inspecciones o entregas.</p>
+                        <p><strong>Ejemplos:</strong> DJI Matrice, Flyability Elios.</p>
+                        <p><strong>Usos:</strong> Inspección de infraestructuras, agricultura de precisión, entregas.</p>
+                    </div>
+                </div>
+                <div class="drone-type" data-category="military">
+                    <img src="https://wallup.net/wp-content/uploads/2019/09/615082-northrop-grumman-x-47b-fighter-jet-concept-drone-military-boeing-748x496.jpg" alt="Dron Militar - MQ-9 Reaper" class="drone-image">
+                    <h3>Drones Militares</h3>
+                    <div class="details">
+                        <p><strong>Descripción:</strong> Diseñados para operaciones militares, con capacidades avanzadas de vigilancia y combate.</p>
+                        <p><strong>Ejemplos:</strong> MQ-9 Reaper, Bayraktar TB2.</p>
+                        <p><strong>Usos:</strong> Reconocimiento, vigilancia, ataques dirigidos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Componentes de un Dron -->
+        <div class="section">
+            <h2>Componentes Principales de un Dron</h2>
+            <ul>
+                <li><strong>Chasis:</strong> Estructura que soporta todos los componentes, generalmente de fibra de carbono o plástico.</li>
+                <li><strong>Motores:</strong> Proporcionan la potencia para el vuelo, normalmente sin escobillas para mayor eficiencia.</li>
+                <li><strong>Hélices:</strong> Generan el empuje necesario para el despegue y maniobras.</li>
+                <li><strong>Controlador de Vuelo:</strong> Cerebro del dron, gestiona la estabilidad y los comandos.</li>
+                <li><strong>Batería:</strong> Fuente de energía, usualmente de polímero de litio (LiPo).</li>
+                <li><strong>Cámara y Sensores:</strong> Para fotografía, navegación y detección de obstáculos.</li>
+                <li><strong>Transmisor/Receptor:</strong> Permite la comunicación con el controlador remoto.</li>
+            </ul>
+        </div>
+
+        <!-- Usos Generales -->
+        <div class="section">
+            <h2>Usos Comunes de los Drones</h2>
+            <ul>
+                <li><strong>Fotografía y Videografía:</strong> Captura de imágenes y videos aéreos para cine, publicidad o eventos.</li>
+                <li><strong>Agricultura:</strong> Monitoreo de cultivos, fumigación y análisis de suelos.</li>
+                <li><strong>Inspecciones:</strong> Evaluación de infraestructuras como puentes, torres o paneles solares.</li>
+                <li><strong>Entregas:</strong> Transporte de paquetes o suministros médicos en áreas remotas.</li>
+                <li><strong>Seguridad y Vigilancia:</strong> Monitoreo de áreas, búsqueda y rescate, control de multitudes.</li>
+                <li><strong>Investigación Científica:</strong> Estudio de ecosistemas, volcanes o fenómenos meteorológicos.</li>
+                <li><strong>Entretenimiento:</strong> Carreras de drones y uso recreativo.</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 - Todo sobre Drones | Creado con ❤️ para entusiastas de la tecnología</p>
+    </footer>
+
+    <script>
+        // Funcionalidad para mostrar/ocultar detalles de drones
+        document.querySelectorAll('.drone-type').forEach(type => {
+            type.addEventListener('click', function() {
+                const details = this.querySelector('.details');
+                if (details.style.display === "block") {
+                    details.style.display = "none";
+                    details.classList.remove('show');
+                } else {
+                    // Cerrar cualquier otro detalle abierto
+                    document.querySelectorAll('.details').forEach(d => {
+                        d.style.display = "none";
+                        d.classList.remove('show');
+                    });
+                    
+                    details.style.display = "block";
+                    setTimeout(() => details.classList.add('show'), 10);
+                }
+            });
+        });
+
+        // Funcionalidad del carrusel
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const indicators = document.querySelectorAll('.indicator');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            if (index >= totalSlides) index = 0;
+            if (index < 0) index = totalSlides - 1;
+            
+            const carouselSlides = document.querySelector('.carousel-slides');
+            carouselSlides.style.transform = `translateX(-${index * 100}%)`;
+            
+            // Actualizar indicadores
+            indicators.forEach((indicator, i) => {
+                indicator.classList.toggle('active', i === index);
+            });
+            
+            currentSlide = index;
+        }
+
+        // Botones de navegación
+        document.querySelector('.next').addEventListener('click', () => {
+            showSlide(currentSlide + 1);
+        });
+
+        document.querySelector('.prev').addEventListener('click', () => {
+            showSlide(currentSlide - 1);
+        });
+
+        // Indicadores
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                showSlide(index);
+            });
+        });
+
+        // Auto-avance del carrusel
+        setInterval(() => {
+            showSlide(currentSlide + 1);
+        }, 5000);
+
+        // Funcionalidad de filtrado
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Actualizar botones activos
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                const filter = this.getAttribute('data-filter');
+                const droneTypes = document.querySelectorAll('.drone-type');
+                
+                droneTypes.forEach(type => {
+                    if (filter === 'all' || type.getAttribute('data-category') === filter) {
+                        type.style.display = 'block';
+                    } else {
+                        type.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
