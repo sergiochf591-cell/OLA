@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P Chat - No Firewall Changes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #chat {
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        #my-id {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        input, button {
+            padding: 8px;
+            margin: 5px 0;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        .received {
+            background-color: #e9ecef;
+            text-align: left;
+        }
+        .sent {
+            background-color: #007bff;
+            color: white;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>P2P Chat (No Firewall Changes)</h1>
+    
+    <div id="my-id">Your ID: <span id="peer-id">Connecting...</span></div>
+    
+    <div>
+        <input type="text" id="remote-id" placeholder="Enter peer ID to connect">
+        <button onclick="connectToPeer()">Connect</button>
+    </div>
+    
+    <div id="chat"></div>
+    
+    <div>
+        <input type="text" id="message-input" placeholder="Type your message">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    
+    <div id="status">Status: Not connected</div>
+
+    <!-- Include PeerJS library -->
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script>
+       let peer;
+let conn;
+let myPeerId;
+
+// Initialize PeerJS
+function initializePeer() {
+    // Create a peer connection using PeerJS cloud server
+    peer = new Peer({
+        host: '0.peerjs.com',
+        port: 443,
+        path: '/',
+        pingInterval: 5000
+    });
+
+    peer.on('open', (id) => {
+        myPeerId = id;
+        document.getElementById('peer-id').textContent = id;
+        document.getElementById('status').textContent = 'Status: Ready to connect';
+        console.log('My peer ID is: ' + id);
+    });
+
+    // Handle incoming connections
+    peer.on('connection', (connection) => {
+        conn = connection;
+        setupConnection(conn);
+        document.getElementById('status').textContent = 'Status: Connected to ' + connection.peer;
+    });
+
+    peer.on('error', (err) => {
+        console.error('PeerJS error:', err);
+        document.getElementById('status').textContent = 'Status: Error - ' + err.type;
+    });
+}
+
+// Set up connection event handlers
+function setupConnection(connection) {
+    connection.on('open', () => {
+        document.getElementById('status').textContent = 'Status: Connected to ' + connection.peer;
+        addMessage('System: Connected to peer!', 'system');
+    });
+
+    connection.on('data', (data) => {
+        addMessage('Peer: ' + data, 'received');
+    });
+
+    connection.on('close', () => {
+        document.getElementById('status').textContent = 'Status: Connection closed';
+        addMessage('System: Connection closed', 'system');
+    });
+
+    connection.on('error', (err) => {
+        console.error('Connection error:', err);
+        document.getElementById('status').textContent = 'Status: Connection error';
+    });
+}
+
+// Connect to another peer
+function connectToPeer() {
+    const remoteId = document.getElementById('remote-id').value.trim();
+    if (!remoteId) {
+        alert('Please enter a peer ID');
+        return;
+    }
+
+    if (conn && conn.open) {
+        conn.close();
+    }
+
+    conn = peer.connect(remoteId);
+    setupConnection(conn);
+}
+
+// Send a message
+function sendMessage() {
+    const messageInput = document.getElementById('message-input');
+    const message = messageInput.value.trim();
+    
+    if (!message) return;
+    
+    if (conn && conn.open) {
+        conn.send(message);
+        addMessage('You: ' + message, 'sent');
+        messageInput.value = '';
+    } else {
+        alert('Not connected to any peer');
+    }
+}
+
+// Add message to chat window
+function addMessage(message, type) {
+    const chat = document.getElementById('chat');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${type}`;
+    messageDiv.textContent = message;
+    chat.appendChild(messageDiv);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+// Handle Enter key in message input
+document.getElementById('message-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
+
+// Initialize when page loads
+window.addEventListener('load', initializePeer);
+    </script>
+</body>
+</html>
